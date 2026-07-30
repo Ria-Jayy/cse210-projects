@@ -9,7 +9,30 @@ public class GoalManager
 
     public void DisplayPlayerInfo()
     {
-        Console.WriteLine($"\nYou have {_score} points.\n");
+        Console.WriteLine($"\nYou have {_score} points.");
+        Console.WriteLine($"Current Level: {GetLevel()}\n");
+    }
+
+    // Creativity Feature:
+    // Determines the player's level based on their score.
+    private string GetLevel()
+    {
+        if (_score >= 10000)
+        {
+            return "Master";
+        }
+        else if (_score >= 5000)
+        {
+            return "Expert";
+        }
+        else if (_score >= 1000)
+        {
+            return "Intermediate";
+        }
+        else
+        {
+            return "Beginner";
+        }
     }
 
     public void ListGoals()
@@ -66,6 +89,10 @@ public class GoalManager
 
                 _goals.Add(new ChecklistGoal(name, description, points, target, bonus));
                 break;
+
+            default:
+                Console.WriteLine("Invalid goal type.");
+                return;
         }
 
         Console.WriteLine("Goal created successfully!");
@@ -89,8 +116,14 @@ public class GoalManager
             int earned = _goals[choice - 1].RecordEvent();
             _score += earned;
 
+            Console.WriteLine($"\nCongratulations!");
             Console.WriteLine($"You earned {earned} points!");
-            Console.WriteLine($"Total Score: {_score}");
+            Console.WriteLine($"Your total score is now {_score}.");
+            Console.WriteLine($"Current Level: {GetLevel()}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid goal selection.");
         }
     }
 
@@ -152,7 +185,6 @@ public class GoalManager
                     break;
 
                 case "ChecklistGoal":
-
                     var checklist = new ChecklistGoal(
                         parts[1],
                         parts[2],
@@ -173,5 +205,6 @@ public class GoalManager
         }
 
         Console.WriteLine("Goals loaded successfully.");
+        Console.WriteLine($"Current Level: {GetLevel()}");
     }
 }

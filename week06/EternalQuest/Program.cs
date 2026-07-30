@@ -1,3 +1,11 @@
+// Creativity Feature:
+// Added a Player Level system.
+// The player's level automatically changes based on the total points earned.
+// Levels are Beginner, Intermediate, Expert, and Master.
+// This provides additional motivation and gamification beyond the core requirements.
+
+
+
 using System;
 
 class Program
