@@ -1,78 +1,51 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 
 class Program
 {
     static void Main(string[] args)
     {
-        // Creativity:
-        // 1. Loads scriptures from a text file.
-        // 2. Randomly selects one scripture.
-        // 3. Only hides words that are still visible.
+        Reference reference = new Reference("Proverbs", 3, 5, 6);
 
-        List<Scripture> scriptures = LoadScriptures();
+        string text =
+            "Trust in the Lord with all thine heart and lean not unto thine own understanding. " +
+            "In all thy ways acknowledge him and he shall direct thy paths.";
 
-        Random random = new Random();
-        Scripture scripture = scriptures[random.Next(scriptures.Count)];
+        Scripture scripture = new Scripture(reference, text);
+
+        Console.Clear();
+        Console.WriteLine(scripture.GetDisplayText());
 
         while (!scripture.IsCompletelyHidden())
         {
-            Console.Clear();
-            Console.WriteLine(scripture.GetDisplayText());
             Console.WriteLine();
-            Console.Write("Press Enter to continue or type 'quit': ");
+            Console.WriteLine("Press Enter to hide words or type 'quit' to exit.");
 
             string input = Console.ReadLine();
 
             if (input.ToLower() == "quit")
-                return;
+            {
+                break;
+            }
+
+            Console.Clear();
 
             scripture.HideRandomWords(3);
+
+            Console.WriteLine(scripture.GetDisplayText());
         }
 
-        Console.Clear();
-        Console.WriteLine(scripture.GetDisplayText());
         Console.WriteLine();
-        Console.WriteLine("Congratulations! You have hidden the entire scripture.");
-    }
-
-    static List<Scripture> LoadScriptures()
-    {
-        List<Scripture> scriptures = new List<Scripture>();
-
-        string[] lines = File.ReadAllLines("scriptures.txt");
-
-        foreach (string line in lines)
-        {
-            // Skip empty lines
-            if (string.IsNullOrWhiteSpace(line))
-            {
-                continue;
-            }
-
-            string[] parts = line.Split('|');
-
-            string book = parts[0];
-            int chapter = int.Parse(parts[1]);
-            int verse = int.Parse(parts[2]);
-
-            Reference reference;
-
-            if (parts[3] == "")
-            {
-                reference = new Reference(book, chapter, verse);
-            }
-            else
-            {
-                int endVerse = int.Parse(parts[3]);
-                reference = new Reference(book, chapter, verse, endVerse);
-            }
-
-            Scripture scripture = new Scripture(reference, parts[4]);
-            scriptures.Add(scripture);
-        }
-
-        return scriptures;
+        Console.WriteLine("Thank you for using the Scripture Memorizer!");
     }
 }
+
+/*
+ * Creativity / Exceeding Requirements:
+ *
+ * I exceeded the core requirements by making the program hide only words
+ * that have not already been hidden. This prevents the program from
+ * randomly selecting the same hidden word again.
+ *
+ * I also made the program hide three words at a time, which helps the user
+ * gradually memorize the scripture instead of hiding too many words at once.
+ */

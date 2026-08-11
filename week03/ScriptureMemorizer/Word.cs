@@ -1,27 +1,27 @@
 public class Word
 {
     private string _text;
-    private bool _hidden;
+    private bool _isHidden;
 
     public Word(string text)
     {
         _text = text;
-        _hidden = false;
-    }
-
-    public void Hide()
-    {
-        _hidden = true;
+        _isHidden = false;
     }
 
     public bool IsHidden()
     {
-        return _hidden;
+        return _isHidden;
+    }
+
+    public void Hide()
+    {
+        _isHidden = true;
     }
 
     public string GetDisplayText()
     {
-        if (_hidden)
+        if (_isHidden)
         {
             return new string('_', _text.Length);
         }

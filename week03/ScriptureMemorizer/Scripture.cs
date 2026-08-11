@@ -5,40 +5,53 @@ public class Scripture
 {
     private Reference _reference;
     private List<Word> _words;
+    private Random _random;
 
     public Scripture(Reference reference, string text)
     {
         _reference = reference;
-
         _words = new List<Word>();
+        _random = new Random();
 
-        foreach (string word in text.Split(' '))
+        string[] wordList = text.Split(' ');
+
+        foreach (string word in wordList)
         {
             _words.Add(new Word(word));
         }
     }
 
+    public string GetDisplayText()
+    {
+        string result = _reference.GetDisplayText() + " ";
+
+        foreach (Word word in _words)
+        {
+            result += word.GetDisplayText() + " ";
+        }
+
+        return result.Trim();
+    }
+
     public void HideRandomWords(int numberToHide)
     {
-        Random random = new Random();
-
-        List<Word> visibleWords = new List<Word>();
+        List<Word> availableWords = new List<Word>();
 
         foreach (Word word in _words)
         {
             if (!word.IsHidden())
             {
-                visibleWords.Add(word);
+                availableWords.Add(word);
             }
         }
 
-        for (int i = 0; i < numberToHide && visibleWords.Count > 0; i++)
+        for (int i = 0; i < numberToHide && availableWords.Count > 0; i++)
         {
-            int index = random.Next(visibleWords.Count);
+            int index = _random.Next(availableWords.Count);
 
-            visibleWords[index].Hide();
+            availableWords[index].Hide();
 
-            visibleWords.RemoveAt(index);
+            availableWords.RemoveAt(index);
         }
     }
 
@@ -47,21 +60,11 @@ public class Scripture
         foreach (Word word in _words)
         {
             if (!word.IsHidden())
+            {
                 return false;
+            }
         }
 
         return true;
-    }
-
-    public string GetDisplayText()
-    {
-        List<string> words = new List<string>();
-
-        foreach (Word word in _words)
-        {
-            words.Add(word.GetDisplayText());
-        }
-
-        return $"{_reference.GetDisplayText()} {string.Join(" ", words)}";
     }
 }
